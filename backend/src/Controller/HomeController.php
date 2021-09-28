@@ -14,8 +14,7 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         return $this->json([
-            'message' => 'Welcome to time tracker',
-            'path' => 'src/Controller/HomeController.php',
+            'message' => 'Welcome to time tracker'
         ]);
     }
 }

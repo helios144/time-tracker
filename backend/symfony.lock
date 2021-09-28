@@ -97,6 +97,12 @@
             "./config/packages/fos_rest.yaml"
         ]
     },
+    "knplabs/knp-components": {
+        "version": "v3.1.0"
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v5.6.0"
+    },
     "laminas/laminas-code": {
         "version": "4.4.3"
     },
@@ -141,6 +147,18 @@
     },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "symfony/apache-pack": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "9d254a22efca7264203eea98b866f16f944b2f09"
+        },
+        "files": [
+            "./public/.htaccess"
+        ]
     },
     "symfony/cache": {
         "version": "v4.4.30"
@@ -328,6 +346,19 @@
     "symfony/stopwatch": {
         "version": "v4.4.27"
     },
+    "symfony/translation": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "2ad9d2545bce8ca1a863e50e92141f0b9d87ffcd"
+        },
+        "files": [
+            "./config/packages/translation.yaml",
+            "./translations/.gitignore"
+        ]
+    },
     "symfony/translation-contracts": {
         "version": "v2.4.0"
     },
@@ -352,6 +383,9 @@
     },
     "symfony/yaml": {
         "version": "v4.4.29"
+    },
+    "twig/twig": {
+        "version": "v3.3.3"
     },
     "webmozart/assert": {
         "version": "1.10.0"

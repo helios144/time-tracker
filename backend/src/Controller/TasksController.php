@@ -6,12 +6,16 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Repository\TaskRepository;
 use App\Entity\Task;
 use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Context\Context;
 use App\Entity\User;
+use App\Components\DocumentGenerator\DocumentGeneratorFactory;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * @Rest\Route("/api/tasks")
@@ -33,12 +37,34 @@ class TasksController extends AbstractFOSRestController
     /**
      * @Rest\Get("")
      */
-    public function getTasks(): \FOS\RestBundle\View\View
+    public function getTasks(Request $request): \FOS\RestBundle\View\View
     {
         /** @var User $user */
         $user = $this->security->getUser();
         $tasks = $this->taskRepository->findBy(['user' => $user->getId()]);
-        return $this->view($tasks, Response::HTTP_OK)->setContext((new Context())->setGroups(['normal']));
+
+        $pageSize = 5;
+        $totalCount = count($tasks);
+        $pages = ceil($totalCount / $pageSize);
+        $page = intval($request->get('page', 1));
+        $page = (!$page || $page <= 0) ? 1 : $page;
+        $page = $page > $pages ? $pages : $page;
+        $pageTasks = [];
+        foreach ($tasks as $key => $value) {
+            if ($key < ($page * $pageSize) && $key >= ($page * $pageSize - $pageSize)) {
+                $pageTasks[] = $value;
+            }
+        }
+        $result = [
+            'tasks' => $pageTasks,
+            'pagination' => [
+                'page' => $page,
+                'pages' => $pages,
+                'pageSize' => $pageSize,
+                'totalCount' => $totalCount
+            ]
+        ];
+        return $this->view($result, Response::HTTP_OK)->setContext((new Context())->setGroups(['normal']));
     }
 
     /**

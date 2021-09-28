@@ -30,7 +30,7 @@ class UserController extends AbstractFOSRestController
 
     /**
      * @Rest\Post("/register", name="user.register")
-     * @Rest\RequestParam(name="email", description="Email address", nullable=false, pattern="^([a-zA-Z0-9\.]+@+[a-zA-Z]+(\.)+[a-zA-Z]{2,3})$")
+     * @Rest\RequestParam(name="email", description="Email address", nullable=false)
      * @param Request $request
      */
     public function register(Request $request): \FOS\RestBundle\View\View
