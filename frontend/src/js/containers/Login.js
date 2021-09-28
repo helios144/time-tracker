@@ -6,7 +6,6 @@ export default function Login({login}) {
     const history = useHistory();
    
       const onSubmit = (data) =>{
-          console.log(data);
         login(data.email,data.password).then(()=>{
             history.push("/tasks");
         }).catch(e=>{
