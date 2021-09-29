@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import Pagiantion from '../components/Pagiantion';
 import NewTaskModal from '../components/NewTaskModal';
 
@@ -6,6 +7,11 @@ import NewTaskModal from '../components/NewTaskModal';
 
     return (
         <>
+        <ul className="nav justify-content-end">
+            <li className="nav-item">
+                <Link to="/logout" className="nav-link">Logout</Link>
+            </li>
+        </ul>
         <h1 className="text-center">Tasks</h1>
         <table className="table">
             <thead>

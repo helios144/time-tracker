@@ -14,6 +14,12 @@ const withTimeTracker = (Component) => (props) => {
             return res;
         });
     }
+
+    const logout = ()=>{
+        localStorage.removeItem('jwtToken');
+        setToken(null);
+    };
+    
     const register = async (username, password)=>{
         return Axios.post(`${process.env.REACT_APP_TIME_TRACKER_API_URL}/user/register`,
                             {username:username,password:password});
@@ -52,7 +58,7 @@ const withTimeTracker = (Component) => (props) => {
 
     };
 
-    return <Component {...props} login = {login} register = {register} getTasks = {getTasks} createTask = {createTask} getPeriodReport = {getPeriodReport} token={token} />;
+    return <Component {...props} login = {login} register = {register} getTasks = {getTasks} createTask = {createTask} getPeriodReport = {getPeriodReport} logout={logout} token={token} />;
 };
 
 export default withTimeTracker;

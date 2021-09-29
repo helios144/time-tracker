@@ -5,8 +5,9 @@ import Register from "./js/containers/Register";
 import Tasks from "./js/containers/Tasks";
 import withTimeTracker from "./js/hoc/withTimeTracker";
 import { NotificationContainer } from "react-notifications";
+import Logout from "./js/containers/Logout";
 
-function App({login,register,getTasks,createTask,getPeriodReport,token}) {
+function App({login,logout,register,getTasks,createTask,getPeriodReport,token}) {
   return (
     <div className="App">
       <div className="container">
@@ -30,8 +31,18 @@ function App({login,register,getTasks,createTask,getPeriodReport,token}) {
           }}
           />
           <Route
+          path="/logout"
+          render={() => {
+            return token ? (
+              <Logout logout={logout}/>
+            ) : (
+              <Redirect to="/login" />
+            );
+          }}
+          />
+          <Route
             path="/"
-            render={() => (<Redirect to="/tasks" />)}
+            render={() => (<Redirect to="/login" />)}
         />
       </Switch>
       <NotificationContainer leaveTimeout={5000} />
