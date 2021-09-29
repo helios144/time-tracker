@@ -27,4 +27,8 @@
 
 - in frontend folder
 - create frontend/.env.local file and adjust change default values as needed
-- it is created using create-react-app so, more detailed instructions in frontend/README.md
+- make a build with command
+  ```bash
+  npm run build
+  ```
+  `build` folder will be created and ready to be served by http server.
