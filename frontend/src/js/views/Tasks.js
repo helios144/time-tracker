@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import Pagiantion from '../components/Pagiantion';
 import NewTaskModal from '../components/NewTaskModal';
+import TaskReportModal from '../components/TaskReportModal';
 
- const Tasks = ({tasks,onTaskSubmit, isTaskCreateShowing,toggleTaskCreate,page,pages,setPage})=>{
+ const Tasks = ({tasks,fileTypes,onTaskSubmit, isTaskCreateShowing,toggleTaskCreate,page,pages,setPage,isTaskReportShowing,toggleTaskReport,getTasksPeriodReport})=>{
 
     return (
         <>
@@ -31,11 +32,20 @@ import NewTaskModal from '../components/NewTaskModal';
             pages={pages}
             setPage={setPage}
         />
-        <button className="btn btn-success" onClick={toggleTaskCreate}>Add Task</button>
+        <div className="btn-group" role="group">
+            <button className="btn btn-success" onClick={toggleTaskCreate}>Add Task</button>
+            <button className="btn btn-secondary" onClick={toggleTaskReport}>Tasks Report</button>
+        </div>
         <NewTaskModal 
         isShowing={isTaskCreateShowing}
         hide={toggleTaskCreate}
         onSubmit={onTaskSubmit}
+        />
+        <TaskReportModal 
+        isShowing={isTaskReportShowing}
+        hide={toggleTaskReport}
+        onSubmit={getTasksPeriodReport}
+        fileTypes={fileTypes}
         />
         </>
     )

@@ -1,6 +1,7 @@
 import React from 'react';
 import RegisterView from "../views/Register";
 import { useHistory } from "react-router-dom";
+import { NotificationManager } from "react-notifications";
 
 export default function Register({login}) {
     const history = useHistory();
@@ -9,7 +10,7 @@ export default function Register({login}) {
         login(data.email,data.password).then(()=>{
             history.push("/login");
         }).catch(e=>{
-            console.log(e);
+          NotificationManager.info(e.response.data.message, 'Error', 1000, null, true);
         });
       };
 

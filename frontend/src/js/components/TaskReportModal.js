@@ -6,13 +6,12 @@ import { useForm } from 'react-hook-form';
 
 
 const schema = yup.object().shape({
-    title:yup.string().required(),
-    comment:yup.string().required(),
-    timeSpent:yup.number().required().positive().integer(),
-    date:yup.date().nullable().transform((curr, orig) => orig === '' ? null : curr)
+    dateFrom:yup.date().nullable().transform((curr, orig) => orig === '' ? null : curr),
+    dateTill:yup.date().nullable().transform((curr, orig) => orig === '' ? null : curr)
 });
 
-const NewTaskModal = ({
+const TaskReportModal = ({
+  fileTypes,
   isShowing,
   hide,
   onSubmit
@@ -24,6 +23,7 @@ const NewTaskModal = ({
   } = useForm({
       resolver:yupResolver(schema)
   });
+
 
   return isShowing
     ? ReactDOM.createPortal(
@@ -48,26 +48,23 @@ const NewTaskModal = ({
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="modal-body text-center">
                       <div className="form-group">
-                        <label htmlFor="title">Title</label>
-                        <input className="form-control" type="text" {...register('title')} />
-                        <div className="invalid-feedback" style={{display:errors?.title?.message?'block':'none'}}>{errors?.title?.message}</div>
+                        <label htmlFor="date">Date from(optional)</label>
+                        <input className="form-control"  type="text" {...register('dateFrom')} placegolder="YYYY-MM-DD"/>
+                        <div className="invalid-feedback" style={{display:errors?.dateFrom?.message?'block':'none'}}>{errors?.dateFrom?.message}</div>
                       </div>
                       <div className="form-group">
-                        <label htmlFor="comment">Comment</label>
-                        <input className="form-control" type="text" {...register('comment')} />
-                        <div className="invalid-feedback" style={{display:errors?.comment?.message?'block':'none'}}>{errors?.comment?.message}</div>
+                        <label htmlFor="date">Date till(optional)</label>
+                        <input className="form-control"  type="text" {...register('dateTill')} placegolder="YYYY-MM-DD"/>
+                        <div className="invalid-feedback" style={{display:errors?.dateTill?.message?'block':'none'}}>{errors?.dateTill?.message}</div>
                       </div>
                       <div className="form-group">
-                        <label htmlFor="time-spent">Time spent(min.)</label>
-                        <input className="form-control" type="text" {...register('timeSpent')} />
-                        <div className="invalid-feedback" style={{display:errors?.timeSpent?.message?'block':'none'}}>{errors?.timeSpent?.message}</div>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="date">Date(optional)</label>
-                        <input className="form-control"  type="text" {...register('date')} placeholder="YYYY-MM-DD"/>
-                        <div className="invalid-feedback" style={{display:errors?.date?.message?'block':'none'}}>{errors?.date?.message}</div>
+                        <label htmlFor="type">Type</label>
+                        <select className="custom-select custom-select-sm" {...register('type')}>
+                          {fileTypes.map(t=><option key={t.type} value={t.type}>{t.label}</option>)}
+                        </select>
                       </div>
                     </div>
+                    
                     <div className="modal-footer dialog-modal-footer text-center">
                       <button  type="submit" className="btn btn-success btn-rec">
                         Submit
@@ -83,4 +80,4 @@ const NewTaskModal = ({
       )
     : null;
 };
-export default NewTaskModal;
+export default TaskReportModal;

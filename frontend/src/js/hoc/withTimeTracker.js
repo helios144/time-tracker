@@ -19,7 +19,7 @@ const withTimeTracker = (Component) => (props) => {
         localStorage.removeItem('jwtToken');
         setToken(null);
     };
-    
+
     const register = async (username, password)=>{
         return Axios.post(`${process.env.REACT_APP_TIME_TRACKER_API_URL}/user/register`,
                             {username:username,password:password});
@@ -54,8 +54,15 @@ const withTimeTracker = (Component) => (props) => {
         });
     };
 
-    const getPeriodReport = (dateFrom,dateTill,format)=>{
-
+    const getPeriodReport = (type,dateFrom,dateTill)=>{
+    return Axios.get(`${process.env.REACT_APP_TIME_TRACKER_API_URL}/tasks/${type}?date-from=${dateFrom}&date-till=${dateTill}`,{ headers: {'Authorization': 'Bearer '+token},responseType: 'arraybuffer'}).catch(e=>{
+            if(e.response.status ===401){
+                setToken(null);
+                history.push('/login');
+            }else{
+                throw e;
+            }
+        });
     };
 
     return <Component {...props} login = {login} register = {register} getTasks = {getTasks} createTask = {createTask} getPeriodReport = {getPeriodReport} logout={logout} token={token} />;

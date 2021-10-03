@@ -1,11 +1,12 @@
 import React from 'react';
 import { Switch, Route, Redirect } from "react-router-dom";
-import Login from "./js/containers/Login";
-import Register from "./js/containers/Register";
-import Tasks from "./js/containers/Tasks";
-import withTimeTracker from "./js/hoc/withTimeTracker";
+import Login from "./Login";
+import Register from "./Register";
+import Tasks from "./Tasks";
+import withTimeTracker from "../hoc/withTimeTracker";
 import { NotificationContainer } from "react-notifications";
-import Logout from "./js/containers/Logout";
+import Logout from "./Logout";
+import "react-notifications/lib/notifications.css";
 
 function App({login,logout,register,getTasks,createTask,getPeriodReport,token}) {
   return (
