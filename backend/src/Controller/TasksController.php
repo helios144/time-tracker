@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Context\Context;
 use App\Entity\User;
 use App\Components\DocumentGenerator\DocumentGeneratorFactory;
+use App\Components\DocumentGenerator\PdfGenerator;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -65,6 +66,66 @@ class TasksController extends AbstractFOSRestController
             ]
         ];
         return $this->view($result, Response::HTTP_OK)->setContext((new Context())->setGroups(['normal']));
+    }
+
+    /**
+     * @Rest\Get("/{fileType}")
+     */
+    public function getTasksReport(Request $request, string $fileType): StreamedResponse
+    {
+
+        /** @var User $user */
+        $user = $this->security->getUser();
+        $dateFrom = new \DateTime($request->get('date-from', date('Y-m-d')));
+        $dateTill = new \DateTime($request->get('date-till', date('Y-m-d')));
+        $tasks = $this->taskRepository->findByUserAndDate($user->getId(), $dateFrom, $dateTill);
+
+
+        $generator = DocumentGeneratorFactory::getGenerator($fileType);
+        $formatedData  = [['Title', 'Comment', 'Time Spent(min.)', 'Date']];
+        foreach ($tasks as &$task) {
+            $taskArray =
+                $taskArray =  [
+                    $task->getTitle(),
+                    $task->getComment(),
+                    $task->getTimeSpent(),
+                    $task->getDate()->format('Y-m-d')
+                ];
+            $formatedData[] = $taskArray;
+        }
+        unset($task);
+
+        $contentType = '';
+        switch ($fileType) {
+            case 'csv':
+                $contentType = "application/csv; charset=utf-8";
+                $generator->setData($formatedData);
+                break;
+            case 'pdf':
+                $contentType = "application/pdf; charset=utf-8";
+                /** @var PdfGenerator $generator */
+                $generator->setHtml($this->renderView('report.html.twig', ['data' => $formatedData]));
+                break;
+            case 'xlsx':
+                $contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8";
+                $generator->setData($formatedData);
+                break;
+            default:
+                throw new BadRequestHttpException('Incorrect file type or unsupported');
+                break;
+        }
+
+
+        $output = $generator->generate();
+        $response = new StreamedResponse(function () use ($output) {
+            echo $output;
+            flush();
+        }, Response::HTTP_OK, [
+            'Content-Type' => $contentType,
+            'Content-Disposition' => "attachment; filename=\"report.$fileType\"",
+            'Access-Control-Expose-Headers' => 'Content-Disposition'
+        ]);
+        return $response;
     }
 
     /**

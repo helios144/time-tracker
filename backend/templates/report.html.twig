@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Report{% endblock %}</title>
+    </head>
+    <body>test 123412341234
+        {% block body %}
+        <table>
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                    {% for col in row %}
+                        <td>{{col}}</td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endblock %}
+    </body>
+</html>
